@@ -82,7 +82,7 @@
 >}).then(()=> console.log("연결대떵!! >_<"))
 >.catch(err=>console.log(err))
 >```
-> 다시 npm run start를 통해 
+>**다시 npm run start를 통해**
 
 
 ---------------------------------------
