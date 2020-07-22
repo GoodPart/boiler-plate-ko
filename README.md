@@ -64,21 +64,25 @@
 >**(2)의 계정의 비밀번호는 메모장에 복사해 둔다**
 >
 >3. 모두 성공했으면 3가지 선택지가 보이는데, **"Connect your application"** 을 클릭.
->4. 하단에 카피 가능한 code가 나온다. (MongoDB와 join할 수 있는 코드다) 복사후 다시 index.js로 간다.
-
->**4.  생성한 **index.js** 에 아래 코드 작성**
+>4. 하단에 카피 가능한 code가 나온다. (MongoDB와 join할 수 있는 코드다) 복사.
+>5. index.js에 아래 코드 추가
 >```
->const express = require('express')
->const app = express()
->const port = 3000 //포트 번호는 마음대로 >_<
->
->app.get('/', (req, res) => res.send('Hello GoodPart!'))
->
->app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+>const mongoURI = "복사 해온 코드"
+
+>**4. server(index.js)와 mongoose설치**
 >```
-
-> **"Hello GoodPart"를 볼 수 있음.**
-
+>npm install mongoose --save
+>```
+>index.js에서 mongoose를 require받아 아래 코드를 작성한다.
+>```
+>const mongoose = require('mongoose')
+>mongoose.connect(config.mongoURI, {
+>    //에러가 안뜨도록 하는 부분 // MAC에서는 useNewUrlParser: true 빼고 에러 발생
+>    useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false
+>}).then(()=> console.log("연결대떵!! >_<"))
+>.catch(err=>console.log(err))
+>```
+> 다시 npm run start를 통해 
 
 
 ---------------------------------------
