@@ -26,7 +26,7 @@ mongoose.connect(config.mongoURI, {
 app.get('/', (req, res) => res.send('Hello World!'))
 
 
-
+//레지스터 라우터
 app.post('/register', (req,res) => {
     //회원가입 할때 필요한 정보들을 Client에서 가져오면, 그것을 DB에 넣어준다 
     //그러기 위해선 Model을 가져와야 한다(와꾸)
@@ -40,6 +40,36 @@ app.post('/register', (req,res) => {
         })
 
     })
+})
+
+//로그인 라우터 
+app.post('/login', (req, res) => {
+    //요청된 이메일을 DB에서 조회
+    User.findOne({ email : req.body.email }, (err, user) => {
+      if(!user) {
+          return res.json({
+              loginSuccess: false,
+              message : "이메일이 다릅니다."
+          })
+      }
+      //요청된 이메일이 있다면, 비밀번호 대조
+      //comparePassword메서드는 User.js에서 만든다.
+      user.comparePassword(req.body.password, (err, isMatch) => {
+        if(!isMatch) return res.json({loginSuccess: false, message: "비밀번호가 틀렸습니다."})
+
+      //비밀번호도 맞다면 토큰 생성
+      user.generateToken( (err, user) => {
+
+      })
+
+      })
+
+    })
+
+    
+
+
+    
 })
 
 
