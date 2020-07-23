@@ -31,8 +31,9 @@
 >```
 
 > **"Hello GoodPart"를 볼 수 있음.**
-
-
+   
+   
+   
 # 2. DB 설치 및 연결(MongoDB)
 
  #### 몽고DB만들고 Node와 연결하는 작업.
