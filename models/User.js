@@ -37,7 +37,7 @@ const userSchema = mongoose.Schema({
     }
 })
 
-//1. pre는 몽구스 메서드
+//1. pre는 몽구스 메서드 -> 값을Save하기전에 아래 코드가 실행되고 next가 진행되야지 값이 넘어감
 //2. 클라이언트의 정보를 받아 저장하기 전, func()을 실행한다.
 //3. 이 단계를 거쳐 index에 레지스터 단에 data가 삽입된다. index.js-> userInfo
 //4. next()을 사용하면 바로 index.js에 레지스터 단으로 들어간다.
