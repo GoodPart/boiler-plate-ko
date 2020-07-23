@@ -75,14 +75,14 @@
 >```
 >index.js에서 mongoose를 require받아 아래 코드를 작성한다.
 
-><code>
+><pre>
 >const mongoose = require('mongoose')
 >mongoose.connect(config.mongoURI, {
 >    //에러가 안뜨도록 하는 부분 // MAC에서는 useNewUrlParser: true 빼고 에러 발생
 >    useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false
 >}).then(()=> console.log("연결대떵!! >_<"))
 >.catch(err=>console.log(err))
-></code>
+></pre>
 >
 >**다시 npm run start를 통해 Log 확인**
 
