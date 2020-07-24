@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 //saltRound = 정보를 10자리로 암호화를 하겠다
 const saltRounds = 10
+//토큰 선언
+const jwt = require('jsonwebtoken')
 
 
 const userSchema = mongoose.Schema({
@@ -68,6 +70,8 @@ userSchema.pre('save', function(next) {
     }
 })
 
+
+
 //cb은 콜백 
 userSchema.methods.comparePassword = function(plainPassword, cb) {
     //plainPassword = 1234567
@@ -75,10 +79,28 @@ userSchema.methods.comparePassword = function(plainPassword, cb) {
     //여기서 암호화된 정보를 복호화할 순 없다. 
     //따라서, 클라이언트에서 받은 비밀번호를 암호화해서 DB에 있는 암호화 비밀번호화 대조한다.
     bcrypt.compare(plainPassword, this.password, function(err, isMatch){
-        if(err) return cb(err),
+        if(err) return cb(err);
         //에러는 없고 true다
         cb(null, isMatch)
     })
+}
+
+userSchema.methods.generateToken = function(cb) {
+    var user = this;
+    
+    //jsonwebtoken을 이용함.
+    //DB에 user._id에서 '_id'는 몽고DB에_id값이 있음 그것을 가져오는거임
+    var token = jwt.sign(user._id.toHexString(), 'secretToken' )
+
+    //만든 토큰을 임시로 token변수에 저장.
+    user.token = token
+
+    //에러가 있다면 에러 발생, 없다면 user파라미터 값으로 index.js에 전달 (메서드 return 값)
+    user.save(function(err, user) {
+        if(err) return cb(err)
+        cb(null, user)
+    })
+
 }
 
 //스키마를 모델로 스키마를 감싼다.

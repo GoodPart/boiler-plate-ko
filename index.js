@@ -4,11 +4,15 @@ const port = 5000
 
 const {User} = require('./models/User')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 
 const config = require("./config/key")
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+//쿠키파서 사용하기 
+app.use(cookieParser());
 
 
 
@@ -59,6 +63,13 @@ app.post('/login', (req, res) => {
 
       //비밀번호도 맞다면 토큰 생성
       user.generateToken( (err, user) => {
+          if(err) return res.status(400).send(err);
+
+          //Token을 저장한다. 어디에?(정할 수 있음) 쿠키, 로컬스토리지...등등
+          res.cookie("x_auth", user.token)
+          .status(200)
+          .json({loginSuccess: true, userId: user._id})
+
 
       })
 
