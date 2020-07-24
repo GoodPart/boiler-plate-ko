@@ -124,6 +124,93 @@
 </pre>
 ---------------------------------------
 
+# 8. 로그인 기능 구현_1
+
+로그인 을 위한 로직
+1. 요청된 이메일을 조회
+2. 이메일이 있다면 비밀번호 대조
+3. 비밀번호도 맞다면 토큰 생성
+
+<pre>
+User.js
+
+
+</pre>
+---------------------------------------
+
+# 9. 로그인 기능 구현_2
+
+jsonwebtoken을 이용함.
+<pre>
+npm install jsonwebtoken --save
+</pre>
+
+<pre>
+User.js
+
+userSchema.methods.generateToken = function(cb) {
+    var user = this;
+    
+    //jsonwebtoken을 이용함.
+    //DB에 user._id에서 '_id'는 몽고DB에_id값이 있음 그것을 가져오는거임
+    var token = jwt.sign(user._id.toHexString(), 'secretToken' )
+
+    //만든 토큰을 임시로 token변수에 저장.
+    user.token = token
+
+    //에러가 있다면 에러 발생, 없다면 user파라미터 값으로 index.js에 전달 (메서드 return 값)
+    user.save(function(err, user) {
+        if(err) return cb(err)
+        cb(null, user)
+    })
+
+}
+</pre>
+
+<pre>
+index.js
+    
+    user.comparePassword()...
+
+    //비밀번호도 맞다면 토큰 생성
+    user.generateToken( (err, user) => {
+        if(err) return res.status(400).send(err);
+
+        //Token을 저장한다. 어디에?(정할 수 있음) 쿠키, 로컬스토리지...등등
+        res.cookie("x_auth", user.token)
+        .status(200)
+        .json({loginSuccess: true, userId: user._id})
+
+
+    })
+</pre>
+user.generateToken()메서드가 실행되어 return된 값이 generateToken((err, user))에서 **user(토큰값)** 값 이다
+생성된 토큰을 저장할 곳을 찾아야한다.
+종류로는 로컬스토리지, 쿠키 등 많지만 여기선 쿠키(cookie)를 사용한다.
+
+쿠키에 저장하기 위해선 새로운 라이브러리가 필요함
+
+<pre>
+npm install cookie-parser --save
+</pre>
+
+index.js에 require와 app.use(...)를 이용해 사용할 준비를 한다.
+
+<pre>
+     //Token을 저장한다. 어디에?(정할 수 있음) 쿠키, 로컬스토리지...등등
+     res.cookie("x_auth", user.token)
+     .status(200)
+     .json({loginSuccess: true, userId: user._id})
+</pre>
+res.cookie("파라미터1", 파라미터2)
+
+파라미터1에는 생성될 쿠키의 key값을 작성한다(이름임)
+파라미터2에는 로그인 요청하여 조회한 유저의 생성도니 토큰값을 넣는다.
+
+그리고 json을 보내 클라이언트에게 성공적으로 로그인 되었다는 값을 보낸다.
+
+---------------------------------------
+
 
 
 
