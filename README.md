@@ -253,3 +253,14 @@ server 폴더
 </pre>
 
 
+<pre>
+주의사항 - 이대로 최상위Root의 package.json(server용)에서 **script** 수정이 필요.
+
+  "scripts": {
+    "backend": "node ./server/index.js", //이렇게 변경이 필요함
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+</pre>
+
+
