@@ -263,4 +263,27 @@ server 폴더
   },
 </pre>
 
+# (추가). client, server 한번에 실행시키기
+
+<pre>
+Root package.json
+
+npm install concurrently --save
+</pre>
+
+<pre>
+Root package.json
+
+
+  "scripts": {
+    "start": "node ./server/index.js",
+    "backend": "nodemon server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev" : "concurrently \"npm run backend\" \"npm run start --prefix client\"" //추가됨
+  },
+
+</pre>
+
+
+
 
