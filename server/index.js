@@ -79,11 +79,11 @@ app.post("/api/users/login", (req, res) => {
   });
 });
 
-app.post("/api/users/auth", auth, (req, res) => {
+app.get("/api/users/auth", auth, (req, res) => {
   //여기까지 오면 미들웨어를 통과한거고, authentication이 true라는 이야기.
   res.status(200).json({
     _id: req.user._id,
-    isAdmin: req.user.role === "0" ? false : true,
+    isAdmin: req.user.role === 0 ? false : true,
     isAuth: true,
     email: req.user.email,
     name: req.user.name,

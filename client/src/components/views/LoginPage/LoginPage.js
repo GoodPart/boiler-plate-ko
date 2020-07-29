@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-// import Axios from "axios";
 import { useDispatch } from "react-redux";
-import { loginUser } from "../../../_action/user_action";
+import { loginUser } from "../../../_actions/user_action";
+import {withRouter} from 'react-router-dom'
 
 function LoginPage(props) {
   const dispatch = useDispatch();
@@ -38,7 +38,8 @@ function LoginPage(props) {
       //서버에서 받은 값의 loginSuccess(server/index.js에 코딩해둠)가true면 
       if (response.payload.loginSuccess) {
         // push('/')페이지로 이동시켜라
-        props.history.push("/");
+        // console.log('여기까지 대는뎁')
+        props.history.push("/")
       } else {
         console.log("err");
       }
@@ -74,4 +75,4 @@ function LoginPage(props) {
   );
 }
 
-export default LoginPage;
+export default withRouter(LoginPage);
