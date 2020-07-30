@@ -300,6 +300,7 @@ client/package.json
 npm install axios --save
 npm install redux react-redux redux-promise redux-thunk --save
 npm install http-proxy-middleware --save
+npm install react-router-dom --save
 </pre>
 
 1. axois : node서버와 통신하기 위함.
@@ -307,6 +308,7 @@ npm install http-proxy-middleware --save
 3. react-redux, redux 리엑트에서 리덕스를 사용하기 위함
 4. redux-promise, redux-thunk 리덕스를 보다 편리하게 사용하기 위한 미들웨어
 store에 상태값은 오로지 dispatch(action실행기)를 이용해서 변경할 수 있다. store는 객체형식, 프로미스, function들을 이용해 받기때문에 이것을 한번에 처리해주는것이 미들웨어들이다.
+5. react-router-dom : spa처럼 화면 전화에 필요함
 
 <pre>
 http-proxy-middleware 설정법
@@ -327,11 +329,171 @@ module.exports = function(app) {
 </pre>
 
 
-# client 만들기 (create-react-app)
+# client 디렉토리 꽉 채우기
 
 <pre>
-root 디렉토리
+client폴더
 
-npx create-react-app client
+- client
+ + _actions - type.js, user_action.js
+ + _reducers - index.js, user_reducer.js
+ + hoc -auth.js
+ + components
+  + view
+   + LoginPage - LoginPage.js
+   + LandingPage - LandingPage.js
+   + RegisterPage- RegisterPage.js
 </pre>
 
+# 라우터 돔 사용하기
+
+<pre>
+client/src/app.js
+
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
+function App() {
+  return (
+    <Router>
+    <div>
+      <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/about">About</Link>
+        </li>
+        <li>
+          <Link to="/dashboard">Dashboard</Link>
+        </li>
+      </ul>
+
+      <hr />
+
+      {/*
+        A <Switch> looks through all its children <Route>
+        elements and renders the first one whose path
+        matches the current URL. Use a <Switch> any time
+        you have multiple routes, but you want only one
+        of them to render at a time
+      */}
+      <Switch>
+        <Route exact path="/">
+          <Home />
+        </Route>
+        <Route path="/about">
+          <About />
+        </Route>
+        <Route path="/dashboard">
+          <Dashboard />
+        </Route>
+      </Switch>
+    </div>
+  </Router>
+  );
+}
+
+export default App;
+
+
+function Home() {
+  return (
+    <div>
+      <h2>Home</h2>
+    </div>
+  );
+}
+
+function About() {
+  return (
+    <div>
+      <h2>About</h2>
+    </div>
+  );
+}
+
+function Dashboard() {
+  return (
+    <div>
+      <h2>Dashboard</h2>
+    </div>
+  );
+}
+</pre>
+
+위 코드는 예시형 코드이고 해당 코드를 아래와 같이 변경할 것
+<pre>
+
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import LandingPage from "./components/views/LandingPage/LandingPage";
+import LoginPage from "./components/views/LoginPage/LoginPage";
+import RegisterPage from "./components/views/RegisterPage/RegisterPage";
+
+function App() {
+  return (
+    <Router>
+    <div>
+      <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/login">login</Link>
+        </li>
+        <li>
+          <Link to="/register">register</Link>
+        </li>
+      </ul>
+
+      <Switch>
+        <Route exact path="/"  component={LandingPage} />
+        <Route  path="/login"  component={LoginPage} />
+        <Route  path="/register"  component={RegisterPage} />
+      </Switch>
+    </div>
+  </Router>
+  );
+}
+
+export default App;
+</pre>
+
+# node서버와 client에 소통 테스트
+
+<pre>
+서버가 실행 되고있어야 테스트가 가능함.
+
+client/.../LandingPage.js
+
+import React, {useEffect} from 'react'
+import axios from 'axios'
+
+function LandingPage() {
+
+    useEffect( ()=> {
+        axios.get('/api/hello')
+        .then(response => {console.log(response)})
+        .catch(err => alert("err", err))
+    })
+
+    return (
+        <div>
+            LandingPage
+        </div>
+    )
+}
+
+export default LandingPage
+</pre>
