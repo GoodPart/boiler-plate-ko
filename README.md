@@ -283,3 +283,25 @@ Root package.json
   },
 
 </pre>
+
+# client 만들기 (create-react-app)
+
+<pre>
+root 디렉토리
+
+npx create-react-app client
+</pre>
+
+### dependencies 추가
+
+<pre>
+client/package.json
+
+npm install redux react-redux redux-promise redux-thunk --save
+</pre>
+
+1. axois : node서버와 통신하기 위함.
+2. http-proxy-middleware : 로컬에서 CORS이슈를 없애기 위함.
+3. react-redux, redux 리엑트에서 리덕스를 사용하기 위함
+4. redux-promise, redux-thunk 리덕스를 보다 편리하게 사용하기 위한 미들웨어
+store에 상태값은 오로지 dispatch(action실행기)를 이용해서 변경할 수 있다. store는 객체형식, 프로미스, function들을 이용해 받기때문에 이것을 한번에 처리해주는것이 미들웨어들이다.
