@@ -297,7 +297,9 @@ npx create-react-app client
 <pre>
 client/package.json
 
+npm install axios --save
 npm install redux react-redux redux-promise redux-thunk --save
+npm install http-proxy-middleware --save
 </pre>
 
 1. axois : node서버와 통신하기 위함.
@@ -305,3 +307,31 @@ npm install redux react-redux redux-promise redux-thunk --save
 3. react-redux, redux 리엑트에서 리덕스를 사용하기 위함
 4. redux-promise, redux-thunk 리덕스를 보다 편리하게 사용하기 위한 미들웨어
 store에 상태값은 오로지 dispatch(action실행기)를 이용해서 변경할 수 있다. store는 객체형식, 프로미스, function들을 이용해 받기때문에 이것을 한번에 처리해주는것이 미들웨어들이다.
+
+<pre>
+http-proxy-middleware 설정법
+
+1. http-proxy-middleware를 사용하기위해 client/src/setupProxy.js를 생성함
+2. 아래 코드를 복사 붙여넣기
+
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
+module.exports = function(app) {
+    app.use('/api', createProxyMiddleware({
+        target: 'http://localhost:5000', //이부분은 server에 포트와 같도록 설정
+        changeOrigin: true,
+        })
+    );
+};
+
+</pre>
+
+
+# client 만들기 (create-react-app)
+
+<pre>
+root 디렉토리
+
+npx create-react-app client
+</pre>
+
